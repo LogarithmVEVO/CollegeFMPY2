@@ -1,0 +1,106 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class StatsManager : MonoBehaviour
+{
+    //Enemy Stats
+    [SerializeField] public int EnemyHealth;
+    [SerializeField] public int EnemyMaxHealth;
+    [SerializeField] public int EnemyStrength;
+    [SerializeField] public int ActionNumber;
+
+    //Hailey's Stats
+    [SerializeField] public int PlayerHealth;
+    [SerializeField] public int PlayerMaxHealth;
+    [SerializeField] public int PlayerStrength;
+    [SerializeField] public int PlayerDefense;
+    [SerializeField] public int PlayerPermaDefense;
+    [SerializeField] public int SuperEnergy;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        //Enemy Stats
+        EnemyHealth = 20;
+        EnemyMaxHealth = 20;
+        EnemyStrength = 0;
+        ActionNumber = 1; //Will be used to determine what attack the enemy uses next.
+
+        //Hailey's Stats
+        PlayerHealth = 1000;
+        PlayerMaxHealth = 30;
+        PlayerStrength = 0;
+        PlayerDefense = 0;
+        PlayerPermaDefense = 0;
+        Smack(); //Declares all starting stats, then performs the smack action. It should deal a total of 5 damage with current settings.
+    }
+
+    public void Smack() // A test action to check that attacks & strength values actually work.
+    {
+        PlayerHealth -= 3;
+        PlayerHealth -= EnemyStrength;
+    }
+    //All the actions Hailey can take are listed below.
+    //Attack
+    public void HaileyAttack()
+    {
+        EnemyHealth -= 3;
+        EnemyHealth -= PlayerStrength;
+    }
+    //(Attack *2) + 1 extra!
+    public void HaileyAttackCombo()
+    {
+        EnemyHealth -= 7;
+        EnemyHealth -= PlayerStrength;
+    }
+    //Weaker attack with an execute threshold
+    public void HaileyAttackCombo2()
+    {
+        EnemyHealth -= 5;
+        if (EnemyHealth <= EnemyMaxHealth / 10)
+        {
+            EnemyHealth = 0;
+        }
+    }
+    //Defend
+    public void HaileyDefend()
+    {
+        PlayerDefense = 5;
+    }
+    //(Defend * 2) + 2 extra!
+    public void HaileyDefendCombo()
+    {
+        PlayerDefense = 12;
+    }
+    //Permanent defense increase
+    public void HaileyDefendCombo2()
+    {
+        PlayerDefense = 8;
+        PlayerPermaDefense++;
+    }
+
+    //Enemy Actions
+    //Basic Attack
+    public void Whack()
+    {
+        PlayerHealth -= 6;
+        PlayerHealth -= EnemyStrength;
+    }
+    //Big Attack
+    public void BigWhack()
+    {
+        PlayerHealth -= 12;
+    }
+    //Go crazy
+    public void HypeUp()
+    {
+        EnemyStrength += 3;
+    }
+    //Deals damage based on enemy strength, adds 10 defense.
+    public void ShieldBash()
+    {
+        PlayerHealth -= EnemyStrength;
+    }
+}
