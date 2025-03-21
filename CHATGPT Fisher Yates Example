@@ -1,0 +1,51 @@
+// CODE GENERATED THROUGH THE ASSISTANCE OF CHATGPT. THIS WORK IS NOT MY OWN AND EXISTS SOLELY TO EDUCATE ME ON HOW THE FISHER-YATES SHUFFLE WORKS
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class FisherYatesShuffle : MonoBehaviour
+{
+    // Method to perform the Fisher-Yates shuffle on an array
+    public static void Shuffle(int[] array)
+    {
+        // Initialize a Random object to generate random numbers
+        System.Random random = new System.Random();
+
+        // Loop from the last index to the second index (because we swap with an element before it)
+        for (int i = array.Length - 1; i > 0; i--)
+        {
+            // Generate a random index j between 0 and i (inclusive)
+            int j = random.Next(0, i + 1);
+
+            // Swap array[i] with array[j]
+            int temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+    }
+
+    // Example array to shuffle
+    public int[] exampleArray = { 1, 2, 3, 4, 5, 6 };
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        // Print the original array in the console
+        Debug.Log("Original Array:");
+        PrintArray(exampleArray);
+
+        // Shuffle the array
+        Shuffle(exampleArray);
+
+        // Print the shuffled array in the console
+        Debug.Log("Shuffled Array:");
+        PrintArray(exampleArray);
+    }
+
+    // Helper method to print the array (for debugging purposes)
+    void PrintArray(int[] array)
+    {
+        string arrayString = string.Join(", ", array);
+        Debug.Log(arrayString);
+    }
+}
