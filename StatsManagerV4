@@ -201,14 +201,4 @@ public class StatsManager : MonoBehaviour
             PlayerDefense = 0;
         }
     }
-    
-    //Misc Actions for the purpose of handling stats
-    public void DefenseDamage() //Universal action to be written into every action that can harm anyone
-    {
-        PlayerDefense -= 6 + EnemyStrength; //<--- Problem
-        if (PlayerDefense < 0)
-        {
-            PlayerHealth += PlayerDefense;
-        }
-    }
 }
