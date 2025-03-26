@@ -1,0 +1,155 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class ActionManager : MonoBehaviour
+{
+    [SerializeField] int Attacks;
+    [SerializeField] int Defenses;
+    [SerializeField] int Gambles;
+    [SerializeField] int QueueTotal;
+    [SerializeField] Text EnemyIntent;
+
+    StatsManager statManager;
+    UI ui;
+
+    private void Start()
+    {
+        statManager = FindFirstObjectByType<StatsManager>();
+        ui = FindFirstObjectByType<UI>();
+        EnemyIntent.text = "This enemy intends to\n attack for " + (6 + statManager.EnemyStrength) + " damage";
+
+        Attacks = 0;
+        Defenses = 0;
+        Gambles = 0;
+        QueueTotal = 0;
+    }
+    public void QueueAttack()
+    {
+        if (QueueTotal == 3)
+        {
+            return;
+        }
+        Attacks++;
+        QueueTotal++;
+    }
+    public void QueueDefense()
+    {
+        if (QueueTotal == 3)
+        {
+            return;
+        }
+        Defenses++;
+        QueueTotal++;
+    }
+    public void QueueGamble()
+    {
+        if (QueueTotal == 3)
+        {
+            return;
+        }
+        Gambles++;
+        QueueTotal++;
+    }
+    public void ClearQueue() //Removes any actions from the queue, remember to update this with each new action.
+    {
+        QueueTotal = 0;
+        Attacks = 0;
+        Defenses = 0;
+        Gambles = 0;
+    }
+    public void EndTurn()
+    {
+        //Determines Hailey's action based on queued cards.
+        QueueTotal = 0;
+        if(Attacks == 3)
+        {
+            statManager.HaileyAttackCombo2();
+            Attacks = 0;
+        }
+        if (Attacks == 2)
+        {
+            statManager.HaileyAttackCombo();
+            Attacks = 0;
+        }
+        if(Attacks == 1)
+        {
+            statManager.HaileyAttack();
+            Attacks = 0;
+        }
+        if(Defenses == 3)
+        {
+            statManager.HaileyDefendCombo2();
+            Defenses = 0;
+        }
+        if(Defenses == 2)
+        {
+            statManager.HaileyDefendCombo();
+            Defenses = 0;
+        }
+        if(Defenses == 1)
+        {
+            statManager.HaileyDefend();
+            Defenses = 0;
+        }
+        if(Gambles == 3)
+        {
+            statManager.HaileyGamble();
+            statManager.HaileyGamble();
+            statManager.HaileyGamble();
+            Gambles = 0;
+        }
+        if(Gambles == 2)
+        {
+            statManager.HaileyGamble();
+            statManager.HaileyGamble();
+            Gambles = 0;
+        }
+        if (Gambles == 1)
+        {
+            statManager.HaileyGamble();
+            Gambles = 0;
+        }
+        //Determines the enemy's action based on the ActionNumber Variable
+        if (statManager.ActionNumber == 1)
+        {
+            Debug.Log("Enemy whacks you!");
+            statManager.Whack();
+            statManager.ActionNumber++;
+            EnemyIntent.text = "This enemy intends to attack for " + (12 + statManager.EnemyStrength/2) + " damage";
+            return;
+        }
+        if (statManager.ActionNumber == 2)
+        {
+            Debug.Log("Enemy REALLY whacks you");
+            statManager.BigWhack();
+            statManager.ActionNumber++;
+            EnemyIntent.text = "This enemy intends to increase their strength by 3";
+            return;
+        }
+        if (statManager.ActionNumber == 3)
+        {
+            Debug.Log("Enemy hypes themselves up!");
+            statManager.HypeUp();
+            statManager.ActionNumber++;
+            EnemyIntent.text = "This enemy intends to deal " + statManager.EnemyStrength + " damage then give themselves 10 defense.";
+            return;
+        }
+        if (statManager.ActionNumber == 4)
+        {
+            Debug.Log("Enemy charges with their shield!");
+            statManager.ShieldBash();
+            statManager.ActionNumber = 1;
+            EnemyIntent.text = EnemyIntent.text = "This enemy intends to\n attack for " + (6 + statManager.EnemyStrength) + " damage";
+            return;
+        }
+        if(statManager.ActionNumber == 5)
+        {
+            Debug.Log("Meow :3");
+            statManager.ActionNumber = 1;
+        }
+        //Yells at the UI script to do its job.
+        ui.UpdateUI();
+    }
+}
