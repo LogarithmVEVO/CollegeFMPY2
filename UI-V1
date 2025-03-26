@@ -1,0 +1,21 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class UI : MonoBehaviour
+{
+    [SerializeField] Text EnemyHP;
+    [SerializeField] Text PlayerHP;
+    [SerializeField] Text PlayerActions;
+    StatsManager statManager;
+    // Start is called before the first frame update
+    void Start()
+    {
+        statManager = FindFirstObjectByType<StatsManager>();
+    }
+    public void UpdateUI()
+    {
+        EnemyHP.text = "Enemy Health: " + statManager.EnemyHealth + "/" + statManager.EnemyMaxHealth;
+    }
+}
