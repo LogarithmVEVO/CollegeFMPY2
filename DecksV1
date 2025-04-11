@@ -1,0 +1,63 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Decks : MonoBehaviour
+{
+    public void Shuffle(int[] array) //This Fisher-Yates Shuffle was written with the assistance of ChatGPT. Please view my Google Site for further details.
+    {
+        System.Random random = new System.Random();
+        for (int i = array.Length - 1; i > 0; i--)
+        {
+            int j = random.Next(0, i + 1);
+            int temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+    }
+
+    int[] drawPile = { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2 };
+    int[] playerHand;
+    ActionManager actionManager;
+    StatsManager statsManager;
+
+    public void DiscardHand() // Plays at the end of each new turn
+    {
+
+    }
+    public void CheckDrownCondition() // At the end of each turn, check to see if you're out of cards completely. If you are, kill the player.
+    {
+        if (drawPile.Length == 0)
+        {
+            statsManager.PlayerHealth = 0;
+        }
+    }
+    void Start()
+    {
+        // Assign cards to the DrawPile based on what your starting deck is. We'll stick to default for now. 8 Attacks and Defends. 3 Gambles.
+        // Attack is represented by "0"
+        // Defend is represented by "1"
+        // Gamble is represented by "2"
+        // Number of actions will be refined on playtest. Others may be added.
+        actionManager = FindFirstObjectByType<ActionManager>();
+        statsManager = FindFirstObjectByType<StatsManager>();
+        {
+            // Written with the assistance of my tutor.
+            int[] drawPile = { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2 };
+            Shuffle(drawPile);
+
+            int[] playerHand = new int[6];
+            for (int i = 0; i < 6 && i < drawPile.Length; i++)
+            {
+                playerHand[i] = drawPile[i];
+            }
+            // Method to print the array for debugging, remove later.
+            PrintArray(playerHand);
+        }
+        void PrintArray(int[] array)
+        {
+            string arrayString = string.Join(", ", array);
+            Debug.Log(arrayString);
+        }
+    }
+}
