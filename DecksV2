@@ -1,0 +1,33 @@
+using NUnit.Framework;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class DecksBetter : MonoBehaviour
+{
+    List<int> drawPile = new List<int> { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2 };
+    
+    //This Fisher-Yates Shuffle was written with the assistance of ChatGPT. Please view my Google Site for further details.
+   public void Shuffle()
+    {
+        for (int i = drawPile.Count - 1; i > 0; i--)
+        {
+            int j = UnityEngine.Random.Range(0, i + 1);
+            int temp = drawPile[i];
+            drawPile[i] = drawPile[j];
+            drawPile[j] = temp;
+        }
+    }
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+    
+}
