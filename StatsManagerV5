@@ -1,0 +1,216 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Security.Cryptography;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class StatsManager : MonoBehaviour
+{
+    //Enemy Stats
+    [SerializeField] public int EnemyHealth;
+    [SerializeField] public int EnemyMaxHealth;
+    [SerializeField] public int EnemyStrength;
+    [SerializeField] public int EnemyDefense;
+    [SerializeField] public int ActionNumber;
+
+    //Hailey's Stats
+    [SerializeField] public int PlayerHealth;
+    [SerializeField] public int PlayerMaxHealth;
+    [SerializeField] public int PlayerStrength;
+    [SerializeField] public int PlayerDefense;
+    [SerializeField] public bool Invulns;
+    [SerializeField] public int SuperEnergy;
+
+    //Other
+    [SerializeField] Text EnemyIntent;
+    [SerializeField] public int PlayerDamageExcess;
+    [SerializeField] public int EnemyDamageExcess;
+
+    UI ui;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        //Enemy Stats
+        EnemyHealth = 40;
+        EnemyMaxHealth = 40;
+        EnemyStrength = 0;
+        EnemyDefense = 0;
+        ActionNumber = 1; //Will be used to determine what attack the enemy uses next.
+
+        //Hailey's Stats
+        PlayerHealth = 50; //TestValue
+        PlayerMaxHealth = 50;
+        PlayerStrength = 0;
+        PlayerDefense = 0;
+        Invulns = false;
+
+        //Make sure everything displays correctly on the UI
+        ui = FindFirstObjectByType<UI>();
+        ui.UpdateUI();
+    }
+
+    //All the actions Hailey can take are listed below.
+    //Attack
+    public void HaileyAttack()
+    {
+        EnemyDefense -= 3 + PlayerStrength;
+        if (EnemyDefense < 0)
+        {
+            EnemyHealth += EnemyDefense;
+            EnemyDefense = 0;
+        }
+    }
+    //(Attack *2) + 1 extra!
+    public void HaileyAttackCombo()
+    {
+        EnemyDefense -= 7 + PlayerStrength;
+        if (EnemyDefense < 0)
+        {
+            EnemyHealth += EnemyDefense;
+            EnemyDefense = 0;
+        }
+    }
+    //Weaker attack with an execute threshold
+    public void HaileyAttackCombo2()
+    {
+        EnemyDefense -= 5 + PlayerStrength;
+        if (EnemyDefense < 0)
+        {
+            EnemyHealth += EnemyDefense;
+            EnemyDefense = 0;
+        }
+        if (EnemyHealth <= EnemyMaxHealth / 10)
+        {
+            EnemyHealth = 0;
+        }
+    }
+    //Defend
+    public void HaileyDefend()
+    {
+        PlayerDefense = 8;
+    }
+    //Riposte
+    public void HaileyDefendCombo()
+    {
+        PlayerDefense = 18;
+    }
+    //does the thing like the star from soup mario man brothers, or it would if I had actually coded it
+    public void HaileyDefendCombo2()
+    {
+        Invulns = true;
+    }
+    public void HaileyGamble()
+    {
+        int randomNumber = Random.Range(0, 10);
+        if (PlayerHealth == 7)
+        {
+            randomNumber = 10;
+        }
+        if (randomNumber == 0)
+        {
+            PlayerHealth--;
+            Debug.Log("zero");
+        }
+        else if (randomNumber == 1)
+        {
+            ActionNumber = 5;
+            EnemyIntent.text = "This enemy will uhh... :3";
+            Debug.Log("one");
+        }
+        else if (randomNumber == 2)
+        {
+            if (EnemyHealth <= EnemyMaxHealth / 8)
+            {
+                EnemyHealth = 0;
+                Debug.Log("two");
+            }
+        }
+        else if (randomNumber == 3)
+        {
+            EnemyHealth += 6;
+            Debug.Log("three");
+        }
+        else if (randomNumber == 4)
+        {
+            PlayerHealth += 9;
+            Debug.Log("four");
+        }
+        else if (randomNumber == 5)
+        {
+            EnemyStrength = 0;
+            PlayerStrength = 0;
+            Debug.Log("five");
+        }
+        else if (randomNumber == 6)
+        {
+            PlayerStrength += 8;
+            Debug.Log("six");
+        }
+        else if (randomNumber == 7)
+        {
+            PlayerHealth -= 1;
+            Debug.Log("seven");
+        }
+        else if (randomNumber == 8)
+        {
+            //Everything becomes missing textures. Player and Enemy become Gmod error text.
+            Debug.Log("eight");
+        }
+        else if (randomNumber == 9)
+        {
+            //fills the super meter
+            Debug.Log("nine");
+        }
+        else if (randomNumber == 10)
+        {
+            EnemyHealth = EnemyMaxHealth;
+            PlayerHealth = PlayerMaxHealth;
+            PlayerStrength += 10;
+            PlayerStrength *= 2;
+            //Fill super meter
+            //Play slot machine jackpot SFX
+            //Start playing tripping on love by ashley collins
+            //Player gets green particles
+            Debug.Log("jackpot");
+        }
+    }
+
+    //Enemy Actions
+    //Basic Attack
+    public void Whack()
+    {
+        PlayerDefense -= 6 + EnemyStrength;
+        if (PlayerDefense < 0)
+        {
+            PlayerHealth += PlayerDefense;
+            PlayerDefense = 0;
+        }
+    }
+    //Big Attack
+    public void BigWhack()
+    {
+        PlayerDefense -= 12 + (EnemyStrength / 2);
+        if (PlayerDefense < 0)
+        {
+            PlayerHealth += PlayerDefense;
+            PlayerDefense = 0;
+        }
+    }
+    //Go crazy
+    public void HypeUp()
+    {
+        EnemyStrength += 3;
+    }
+    //Deals damage based on enemy strength, adds 10 defense.
+    public void ShieldBash()
+    {
+        PlayerDefense -= EnemyStrength;
+        EnemyDefense += 10;
+        if (PlayerDefense < 0)
+        {
+            PlayerHealth += PlayerDefense;
+            PlayerDefense = 0;
+        }
+    }
+}
